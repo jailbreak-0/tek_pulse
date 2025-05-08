@@ -44,12 +44,6 @@ export default function AuthPage() {
   setLoading(false);
 };
 
-// Handles logout manually from anywhere
-const handleLogout = async () => {
-  await supabase.auth.signOut();
-  router.push("/auth");
-};
-
   return (
     <div 
       className="min-h-screen flex items-center justify-center bg-gray-100">
