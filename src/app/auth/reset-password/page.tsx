@@ -28,7 +28,7 @@ export default function ResetPassword() {
     }
 
     // Call Supabase to update the password for the current session
-    const { data, error } = await supabase.auth.updateUser({
+    const { error } = await supabase.auth.updateUser({
       password: newPassword,
     });
 

@@ -32,7 +32,7 @@ export default function AuthPage() {
     const method = isLogin ? "signInWithPassword" : "signUp";
 
   // Calls Supabase auth method
-  const { data, error } = await supabase.auth[method]({
+  const { error } = await supabase.auth[method]({
     email,
     password,
   });

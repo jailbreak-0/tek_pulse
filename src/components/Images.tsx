@@ -2,6 +2,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import Image from "next/image";
 
 interface SupabaseImageProps {
   path: string;                // The file path within the bucket
@@ -38,7 +39,7 @@ const SupabaseImage = ({
   }, [path, bucket, isPublic]);
 
   return imgUrl ? (
-    <img src={imgUrl} alt={alt} className={className} />
+    <Image src={imgUrl} alt={alt} className={className} />
   ) : (
     <div className="text-sm text-gray-500">Loading image...</div>
   );
