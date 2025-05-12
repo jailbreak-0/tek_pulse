@@ -27,9 +27,14 @@ export default function MapboxMap({
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/jailbreak-0/cmal5hvlt013i01s339kd0ei3",
       center: center as LngLatLike,
       zoom,
+
+      maxBounds: [
+        [-1.5700, 6.6700], // Southwest corner (lng, lat)
+        [-1.5600, 6.6760], // Northeast corner (lng, lat)
+      ],
     });
 
     mapRef.current = map;
