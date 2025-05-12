@@ -13,7 +13,7 @@ type MapboxMapProps = {
 };
 
 export default function MapboxMap({
-  center = [6.673175, -1.565423],
+  center = [-1.573122, 6.676702],
   zoom = 15,
   marker,
   onClick,
@@ -32,8 +32,8 @@ export default function MapboxMap({
       zoom,
 
       maxBounds: [
-        [-1.5700, 6.6700], // Southwest corner (lng, lat)
-        [-1.5600, 6.6760], // Northeast corner (lng, lat)
+        [-1.597893, 6.659612], // Southwest corner (lng, lat)
+        [-1.544703, 6.693702], // Northeast corner (lng, lat)
       ],
     });
 
