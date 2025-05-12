@@ -10,6 +10,7 @@ type MapboxMapProps = {
   zoom?: number;
   marker?: [number, number];
   onClick?: (coords: [number, number]) => void;
+  mapStyle?: string;
 };
 
 export default function MapboxMap({
@@ -17,17 +18,20 @@ export default function MapboxMap({
   zoom = 15,
   marker,
   onClick,
+  mapStyle = "mapbox://styles/jailbreak-0/cmal5hvlt013i01s339kd0ei3",
 }: MapboxMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const markerRef = useRef<mapboxgl.Marker | null>(null);
+
+  
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/jailbreak-0/cmal5hvlt013i01s339kd0ei3",
+      style: mapStyle || "mapbox://styles/jailbreak-0/cmal5hvlt013i01s339kd0ei3",
       center: center as LngLatLike,
       zoom,
 
@@ -61,7 +65,11 @@ export default function MapboxMap({
     }
   }, [marker]);
 
-  
+  useEffect(() => {
+    if (mapRef.current && mapStyle) {
+      mapRef.current.setStyle(mapStyle);
+    }
+  }, [mapStyle]);
 
   return (
     <div
