@@ -55,8 +55,12 @@ export default function AccountSetup() {
       //profile_picture: profilePicture,
     });
 
-    if (!error) router.push("/");
-    else alert("Error saving profile.");
+    if (!error) {
+      router.push("/");
+    } else {
+      console.error("Upsert error:", error.message);
+      alert("Error saving profile: " + error.message);
+    }
   };
 
   if (loading) return <p>Checking profile...</p>;
