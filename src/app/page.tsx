@@ -15,23 +15,26 @@ export default function Home() {
           <title>TekPulse</title>
         </Head>
         <main className="max-w-4xl mx-auto">
-
-          <div className="flex flex-col mb-10">
-            <h1 className="text-3xl font-bold mb-6 text-[#22AB39]">Welcome to TekPulse</h1>
+            <h1 className="text-3xl font-bold mb-6 text-[#22AB39] text-center">
+              Welcome to TekPulse
+            </h1>
+          <div className="flex flex-col justify-center mb-10">
             {userData?.profile_picture ? (
             <SupabaseImage
               path={userData?.profile_picture}
               bucket="pictures/image"
               isPublic={true}
-              className="rounded-full border"
+              className="absolute rounded-full border"
             />
             ) : (
-            <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+            <div className="w-20 h-20 absolute bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
               No image
             </div>
             )}
-            <h3>Welcome {userData?.full_name}</h3>
-            <p>Index Number: {userData?.student_id}</p>
+            <div className="px-25 items-center">
+              <h3>Full Name: {userData?.full_name}</h3>
+              <p>Student Number: {userData?.student_id}</p>
+            </div>
           </div>
 
           <nav className="flex justify-between gap-2">
