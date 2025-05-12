@@ -25,19 +25,20 @@ export default function ClientMapWrapper() {
 
 return (
   <>
-    <label className="block mb-2 font-medium">Map Style:</label>
-    <select
-      value={style}
-      onChange={(e) => setStyle(e.target.value)}
-      className="flex p-2 border rounded w-50px max-w-sm"
-    >
-      {styles.map((s) => (
-        <option key={s.value} value={s.value} className="text-black">
-          {s.label}
-        </option>
-      ))}
-    </select>
-    
+    <div className="flex mb-4 justify-end items-end gap-2">
+      <label className="block mb-2 font-medium">Map Style:</label>
+      <select
+        value={style}
+        onChange={(e) => setStyle(e.target.value)}
+        className="flex p-2 border rounded w-50px max-w-sm"
+      >
+        {styles.map((s) => (
+          <option key={s.value} value={s.value} className="text-black">
+            {s.label}
+          </option>
+        ))}
+      </select>
+    </div>
     <MapView mapStyle={style} />
   </>
 );

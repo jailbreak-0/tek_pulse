@@ -24,6 +24,9 @@ export default function LostAndFoundSubmitPage() {
       alert("Please fill in all fields.");
       return;
     }
+    
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log("User:", user);
 
     setSubmitting(true);
 
