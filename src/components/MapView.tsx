@@ -13,7 +13,7 @@ type MapboxMapProps = {
 };
 
 export default function MapboxMap({
-  center = [0, 0],
+  center = [6.673175, -1.565423],
   zoom = 15,
   marker,
   onClick,
@@ -56,10 +56,12 @@ export default function MapboxMap({
     }
   }, [marker]);
 
+  
+
   return (
     <div
       ref={mapContainerRef}
-      className="w-full h-[400px] rounded border shadow"
+      className="w-full h-[600px] rounded border shadow cursor-grab"
     />
   );
 }

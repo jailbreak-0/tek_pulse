@@ -1,4 +1,7 @@
-import type { Metadata } from "next";
+//import type { Metadata } from "next";
+"use client";
+
+import { usePathname } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import {ThemeProvider} from '@/context/ThemeContext';
@@ -15,10 +18,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "TekPulse",
-  description: "CS Final Year Project",
-};
+// export const metadata: Metadata = {
+//   title: "TekPulse",
+//   description: "CS Final Year Project",
+// };
 
 export default function RootLayout({
   children,
@@ -27,6 +30,12 @@ export default function RootLayout({
 }>) 
 
 {
+  const pathname = usePathname();
+  // Routes here where Navbar is hidden
+  const hideNavbarRoutes = ["/auth", "/reset-password", "/forgot-password"];
+
+  const shouldHideNavbar = hideNavbarRoutes.some((route) => pathname.startsWith(route));
+
   return (
     <html lang="en">
       <title>TekPulse</title>
@@ -35,7 +44,7 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <UserProvider>
-            <Navbar />
+            {!shouldHideNavbar && <Navbar />}
             <main>{children}</main>
           </UserProvider>
         </ThemeProvider>

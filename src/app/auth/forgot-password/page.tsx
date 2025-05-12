@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import { sendPasswordReset } from "@/lib/sendPasswordReset";
+import SupabaseImage from "@/components/Images";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -23,8 +24,15 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center">
+      <SupabaseImage
+        path="background.webp"
+        bucket="pictures/image"
+        isPublic={true}
+        alt="background"
+        className="absolute object-cover w-full h-full blur-xs"
+      />
+      <div className="bg-white p-8 rounded shadow max-w-md w-full z-10">
         <h2 className="text-2xl font-bold mb-6 text-center text-[#22AB39]">Forgot Password</h2>
 
         <input

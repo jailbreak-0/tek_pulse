@@ -10,6 +10,8 @@ interface SupabaseImageProps {
   bucket?: string;            // Optional: specify a different bucket
   isPublic?: boolean;         // Whether the bucket is public or private
   className?: string;         // Optional styling classes
+  width?: number;        // Optional width for the image
+  height?: number;       // Optional height for the image
 }
 
 const SupabaseImage = ({
@@ -17,7 +19,9 @@ const SupabaseImage = ({
   alt = "Supabase image",
   bucket = "user-uploads",
   isPublic = false,
-  className = ""
+  className = "",
+  width = 300,
+  height = 300,
 }: SupabaseImageProps) => {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
 
@@ -39,7 +43,7 @@ const SupabaseImage = ({
   }, [path, bucket, isPublic]);
 
   return imgUrl ? (
-    <Image src={imgUrl} alt={alt} className={className} />
+    <Image src={imgUrl} alt={alt} className={className} width={width} height={height}/>
   ) : (
     <div className="text-sm text-gray-500">Loading image...</div>
   );

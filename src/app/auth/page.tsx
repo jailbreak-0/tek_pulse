@@ -45,9 +45,15 @@ export default function AuthPage() {
 };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white px-8 pb-8 rounded shadow max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center">
+      <SupabaseImage
+        path="background.webp"
+        bucket="pictures/image"
+        isPublic={true}
+        alt="background"
+        className="absolute object-cover w-full h-full blur-xs"
+      />
+      <div className="bg-white px-8 pb-8 rounded shadow max-w-md w-full z-10">
         <SupabaseImage 
           path="logo.jpeg"
           bucket="pictures/image"

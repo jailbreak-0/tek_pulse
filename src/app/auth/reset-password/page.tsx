@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import SupabaseImage from "@/components/Images";
 
 export default function ResetPassword() {
   // State variables for user input, feedback messages, and loading state
@@ -43,8 +44,15 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center">
+      <SupabaseImage
+        path="background.webp"
+        bucket="pictures/image"
+        isPublic={true}
+        alt="background"
+        className="absolute object-cover w-screen h-full blur-xs"
+      />
+      <div className="bg-white p-8 rounded shadow max-w-md w-full z-10">
         <h2 className="text-2xl font-bold mb-6 text-center text-[#22AB39]">Reset Password</h2>
 
         {/* New password input */}
