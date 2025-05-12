@@ -48,6 +48,8 @@ export default function AccountSetup() {
       return;
     }
 
+    console.log("User ID:", user.id);
+
     const { error } = await supabase.from("profiles").upsert({
       id: user.id,
       full_name: fullName,
