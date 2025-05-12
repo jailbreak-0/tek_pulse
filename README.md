@@ -38,6 +38,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Website Routes
 Some site routes for easy access without having to do the email stuff
 
-/auth : Login/Sign Up Page
-/auth/forgot-password : Forgot password page(with working API - sends an email to reset password)
-/auth/reset-password : Reset password page(accessible after clicking on the reset password email link)
+- /auth : Login/Sign Up Page
+- /auth/forgot-password : Forgot password page(with working API - sends an email to reset password)
+- /auth/reset-password : Reset password page(accessible after clicking on the reset password email link)
