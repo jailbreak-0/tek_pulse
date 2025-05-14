@@ -29,59 +29,67 @@ export default function CreatePostOverlay({ post, onClose }: Props) {
   // Handles both create and update logic
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setUploading(true);
+  setUploading(true);
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  // Get the logged-in user
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-    if (!user) {
-      alert("You must be logged in.");
+  if (!user || userError) {
+    alert("You must be logged in.");
+    return;
+  }
+
+  let imageUrl = previewUrl;
+
+  // Upload image if selected
+  if (imageFile) {
+    const filePath = `posts/${uuidv4()}-${imageFile.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("pictures")
+      .upload(filePath, imageFile);
+
+    if (uploadError) {
+      alert("Image upload failed: " + uploadError.message);
+      setUploading(false);
       return;
     }
 
-    let imageUrl = previewUrl;
+    const { data: publicData } = supabase.storage
+      .from("pictures")
+      .getPublicUrl(filePath);
+    imageUrl = publicData?.publicUrl;
+  }
 
-    // Upload image if a new one was selected
-    if (imageFile) {
-      const filePath = `posts/${uuidv4()}-${imageFile.name}`;
-      const { data, error } = await supabase.storage
-        .from("pictures")
-        .upload(filePath, imageFile);
+  // Insert or update post
+  const postPayload = {
+    user_id: user.id, // ✅ Must match auth.uid() for RLS to allow insert
+    content,
+    image_url: imageUrl,
+  };
 
-      if (error) {
-        alert("Image upload failed: " + error.message);
-        setUploading(false);
-        return;
-      }
+  let error;
+  if (post?.id) {
+    // Update mode
+    ({ error } = await supabase
+      .from("posts")
+      .update(postPayload)
+      .eq("id", post.id));
+  } else {
+    // Insert mode
+    ({ error } = await supabase.from("posts").insert(postPayload));
+  }
 
-      const { data: publicData } = supabase.storage
-        .from("pictures")
-        .getPublicUrl(filePath);
-      imageUrl = publicData?.publicUrl;
-    }
+  if (error) {
+    console.error("Post save error:", error.message);
+    alert("Failed to save post: " + error.message);
+  } else {
+    onClose();
+  }
 
-    // Create or update post
-    if (post?.id) {
-      // 🔄 Update
-      const { error } = await supabase
-        .from("posts")
-        .update({ content, image_url: imageUrl })
-        .eq("id", post.id);
-
-      if (error) alert("Update failed: " + error.message);
-    } else {
-      // ➕ Create
-      const { error } = await supabase.from("posts").insert({
-        user_id: user.id,
-        content,
-        image_url: imageUrl,
-      });
-
-      if (error) alert("Post failed: " + error.message);
-    }
-
-    setUploading(false);
+  setUploading(false);
     onClose(); // Close the overlay
   };
 

@@ -40,6 +40,7 @@ export default function FeedPage() {
     };
     getUser();
   }, []);
+  
 
   // Fetch posts with profile and like info
   useEffect(() => {
@@ -57,26 +58,43 @@ export default function FeedPage() {
     fetchPosts();
   }, []);
 
-  // Real-time updates
+  // Helper to fetch full post with joins
+  const fetchFullPost = async (id: string): Promise<Post | null> => {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*, profiles(full_name, avatar_url), likes(user_id)")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("Failed to fetch full post:", error.message);
+      return null;
+    }
+    return data;
+  };
+
+  // Real-time listener with full post fetch
   useEffect(() => {
     const channel = supabase
       .channel("posts_feed")
-      .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, (payload) => {
-        const post = payload.new as Post;
-        const event = payload.eventType;
-
-        if (event === "INSERT") {
-          setPosts((prev) => [post, ...prev]);
-          setNotification("A new post was added");
-        } else if (event === "UPDATE") {
-          setPosts((prev) => [post, ...prev.filter((p) => p.id !== post.id)]);
-          setNotification("A post was updated");
-        } else if (event === "DELETE") {
-          const id = payload.old.id;
-          setPosts((prev) => prev.filter((p) => p.id !== id));
-          setNotification("A post was removed");
-        }
-
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "posts" }, async (payload) => {
+        const fullPost = await fetchFullPost(payload.new.id);
+        if (!fullPost) return;
+        setPosts((prev) => [fullPost, ...prev]);
+        setNotification("A new post was added");
+        setTimeout(() => setNotification(null), 3000);
+      })
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "posts" }, async (payload) => {
+        const fullPost = await fetchFullPost(payload.new.id);
+        if (!fullPost) return;
+        setPosts((prev) => [fullPost, ...prev.filter((p) => p.id !== fullPost.id)]);
+        setNotification("A post was updated");
+        setTimeout(() => setNotification(null), 3000);
+      })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "posts" }, (payload) => {
+        const deletedId = payload.old.id;
+        setPosts((prev) => prev.filter((p) => p.id !== deletedId));
+        setNotification("A post was removed");
         setTimeout(() => setNotification(null), 3000);
       })
       .subscribe();
