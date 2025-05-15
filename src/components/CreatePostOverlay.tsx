@@ -42,25 +42,29 @@ export default function CreatePostOverlay({ post, onClose }: Props) {
     return;
   }
 
-  let imageUrl = previewUrl;
+  let imageUrl: string | null = null;
 
-  // Upload image if selected
-  if (imageFile) {
-    const filePath = `posts/${uuidv4()}-${imageFile.name}`;
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("pictures")
+   // Upload image to Supabase Storage if one was selected
+   if (imageFile) {
+    const fileExt = imageFile.name.split(".").pop();
+    const filePath = `${user.id}/${uuidv4()}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("post-images")
       .upload(filePath, imageFile);
 
     if (uploadError) {
       alert("Image upload failed: " + uploadError.message);
-      setUploading(false);
       return;
     }
 
-    const { data: publicData } = supabase.storage
-      .from("pictures")
+    // Get public URL for display
+    const { data: publicUrl } = supabase
+      .storage
+      .from("post-images")
       .getPublicUrl(filePath);
-    imageUrl = publicData?.publicUrl;
+
+    imageUrl = publicUrl.publicUrl;
   }
 
   // Insert or update post
